@@ -3575,18 +3575,13 @@ ventana_ajustes = SettingsWindow(
     version=VERSION_APP,
 
     enlaces={
-        "github": "https://github.com/VulthyDev",
+        "github": "https://github.com/VulthyDev/LITESYDUG",
+        "soporte": "https://github.com/VulthyDev/LITESYDUG/issues/new",
         "kofi": "https://ko-fi.com/vulthydev",
-        "soporte": "https://github.com/VulthyDev",
     },
 
     al_guardar=aplicar_ajustes_en_vivo
 )
-
-
-def abrir_ajustes():
-
-    ventana_ajustes.abrir()
 
 
 def abrir_ajustes():

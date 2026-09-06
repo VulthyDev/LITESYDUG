@@ -13,30 +13,58 @@ class Settings:
         archivo="settings.json"
     ):
 
-        # -------------------------------------------------
-        # RUTA DEL PROYECTO
-        # -------------------------------------------------
+        # =====================================================
+        # CARPETA DE CONFIGURACIÓN
+        # =====================================================
 
-        carpeta_proyecto = os.path.dirname(
-            os.path.abspath(__file__)
+        carpeta_local = os.environ.get(
+            "LOCALAPPDATA"
         )
 
 
+        if not carpeta_local:
+
+            carpeta_local = os.path.join(
+                os.path.expanduser("~"),
+                "AppData",
+                "Local"
+            )
+
+
+        carpeta_config = os.path.join(
+            carpeta_local,
+            "LITESYDUG"
+        )
+
+
+        # Crear la carpeta si todavía no existe
+        try:
+
+            os.makedirs(
+                carpeta_config,
+                exist_ok=True
+            )
+
+        except Exception:
+
+            pass
+
+
         self.ruta_archivo = os.path.join(
-            carpeta_proyecto,
+            carpeta_config,
             archivo
         )
 
 
-        # -------------------------------------------------
+        # =====================================================
         # VALORES POR DEFECTO
-        # -------------------------------------------------
+        # =====================================================
 
         self.defaults = {
 
-            # =============================================
+            # -------------------------------------------------
             # GENERAL
-            # =============================================
+            # -------------------------------------------------
 
             "volumen": 70,
 
@@ -53,16 +81,16 @@ class Settings:
             "salto_segundos": 10,
 
 
-            # =============================================
+            # -------------------------------------------------
             # RENDIMIENTO
-            # =============================================
+            # -------------------------------------------------
 
             "modo_rendimiento": "Normal",
 
 
-            # =============================================
+            # -------------------------------------------------
             # INTERFAZ
-            # =============================================
+            # -------------------------------------------------
 
             "mostrar_tooltips": True,
 
@@ -73,9 +101,9 @@ class Settings:
             "posicion_ventana": "",
 
 
-            # =============================================
+            # -------------------------------------------------
             # HOTKEYS
-            # =============================================
+            # -------------------------------------------------
 
             "hotkeys": {
 
@@ -119,26 +147,25 @@ class Settings:
         }
 
 
-        # -------------------------------------------------
+        # =====================================================
         # DATOS ACTUALES
-        # -------------------------------------------------
+        # =====================================================
 
         self.datos = self.defaults.copy()
 
 
-        # Las partes internas también necesitan copia,
-        # para evitar modificar los defaults originales.
+        self.datos[
+            "hotkeys"
+        ] = self.defaults[
+            "hotkeys"
+        ].copy()
 
-        self.datos["hotkeys"] = (
-            self.defaults["hotkeys"].copy()
-        )
 
-
-        self.datos["hotkeys_nombres"] = (
-            self.defaults[
-                "hotkeys_nombres"
-            ].copy()
-        )
+        self.datos[
+            "hotkeys_nombres"
+        ] = self.defaults[
+            "hotkeys_nombres"
+        ].copy()
 
 
         self.cargar()
@@ -157,16 +184,18 @@ class Settings:
         datos_nuevos = self.defaults.copy()
 
 
-        datos_nuevos["hotkeys"] = (
-            self.defaults["hotkeys"].copy()
-        )
+        datos_nuevos[
+            "hotkeys"
+        ] = self.defaults[
+            "hotkeys"
+        ].copy()
 
 
-        datos_nuevos["hotkeys_nombres"] = (
-            self.defaults[
-                "hotkeys_nombres"
-            ].copy()
-        )
+        datos_nuevos[
+            "hotkeys_nombres"
+        ] = self.defaults[
+            "hotkeys_nombres"
+        ].copy()
 
 
         # -------------------------------------------------
@@ -279,6 +308,17 @@ class Settings:
     def guardar(self):
 
         try:
+
+            carpeta = os.path.dirname(
+                self.ruta_archivo
+            )
+
+
+            os.makedirs(
+                carpeta,
+                exist_ok=True
+            )
+
 
             with open(
                 self.ruta_archivo,
